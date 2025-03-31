@@ -66,6 +66,17 @@
           width: 185px;
         }
       }
+      .form-content {
+        position: relative;
+        width: 100%;
+        min-width: 300px;
+        padding: 40px;
+        overflow-x: hidden;
+        background-color: rgb(255 255 255 / 80%);
+        border-radius: 10px;
+        box-shadow: 2px 3px 7px rgb(0 0 0 / 20%);
+        backdrop-filter: blur(6px);
+      }
     }
   }
 }
