@@ -16,6 +16,8 @@
     padding: 0 50px;
     background-color: rgb(255 255 255 / 80%);
     border-radius: 10px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     .dark {
       position: absolute;
       top: 13px;
