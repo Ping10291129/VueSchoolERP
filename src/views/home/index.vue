@@ -63,24 +63,24 @@
     <!-- 图表区域 -->
     <el-row :gutter="20" class="mb-4">
       <el-col :span="16">
-        <el-card shadow="hover">
+        <el-card shadow="hover" class="chart-card">
           <template #header>
             <div class="card-header">
               <span>学生人数趋势</span>
-              <StudentTrendSwitch v-model="chartTimeRange" />
+              <StudentTrendSwitch v-model="chartTimeRange" class="trend-switch" />
             </div>
           </template>
-          <div ref="studentTrendChartRef" style="height: 300px"></div>
+          <div ref="studentTrendChartRef" class="chart-container"></div>
         </el-card>
       </el-col>
       <el-col :span="8">
-        <el-card shadow="hover">
+        <el-card shadow="hover" class="chart-card">
           <template #header>
             <div class="card-header">
               <span>教师分布</span>
             </div>
           </template>
-          <div ref="teacherDistChartRef" style="height: 300px"></div>
+          <div ref="teacherDistChartRef" class="chart-container"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -88,7 +88,7 @@
     <!-- 快捷功能区 -->
     <el-row :gutter="20">
       <el-col :span="12">
-        <el-card shadow="hover">
+        <el-card shadow="hover" class="notice-todo-card">
           <template #header>
             <div class="card-header">
               <span>最新通知</span>
@@ -103,7 +103,7 @@
         </el-card>
       </el-col>
       <el-col :span="12">
-        <el-card shadow="hover">
+        <el-card shadow="hover" class="notice-todo-card">
           <template #header>
             <div class="card-header">
               <span>待办事项</span>
@@ -258,6 +258,51 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+  .notice-todo-card {
+    :deep(.el-card__header) {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--el-border-color-light);
+      .card-header {
+        height: 32px;
+        span {
+          font-size: 16px;
+          font-weight: 500;
+        }
+      }
+    }
+    :deep(.el-card__body) {
+      height: 300px;
+      padding: 16px;
+      overflow-y: auto;
+    }
+  }
+  .chart-card {
+    :deep(.el-card__header) {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--el-border-color-light);
+      .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 32px;
+        span {
+          font-size: 16px;
+          font-weight: 500;
+        }
+        .trend-switch {
+          margin: 0;
+        }
+      }
+    }
+    .chart-container {
+      height: 35vh;
+      padding: 0;
+
+      @media (width <= 768px) {
+        height: 30vh;
+      }
+    }
   }
 }
 </style>
