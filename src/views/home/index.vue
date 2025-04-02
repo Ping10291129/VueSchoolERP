@@ -67,14 +67,10 @@
           <template #header>
             <div class="card-header">
               <span>学生人数趋势</span>
-              <el-radio-group v-model="chartTimeRange" size="small">
-                <el-radio-button label="week">本周</el-radio-button>
-                <el-radio-button label="month">本月</el-radio-button>
-                <el-radio-button label="year">全年</el-radio-button>
-              </el-radio-group>
+              <StudentTrendSwitch v-model="chartTimeRange" />
             </div>
           </template>
-          <div ref="studentTrendChart" style="height: 300px"></div>
+          <div ref="studentTrendChartRef" style="height: 300px"></div>
         </el-card>
       </el-col>
       <el-col :span="8">
@@ -84,7 +80,7 @@
               <span>教师分布</span>
             </div>
           </template>
-          <div ref="teacherDistChart" style="height: 300px"></div>
+          <div ref="teacherDistChartRef" style="height: 300px"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -132,15 +128,36 @@
 </template>
 
 <script setup lang="ts" name="home">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import * as echarts from "echarts";
 import { User, School, Reading, Monitor } from "@element-plus/icons-vue";
+import StudentTrendSwitch from "@/components/StudentTrendSwitch/index.vue";
+
+// 图表实例
+let studentTrendChart: echarts.ECharts | null = null;
+let teacherDistChart: echarts.ECharts | null = null;
 
 // 在线用户数
 const onlineUsers = ref(128);
 
 // 图表时间范围
 const chartTimeRange = ref("week");
+
+// 监听时间范围变化
+watch(chartTimeRange, newRange => {
+  if (studentTrendChart) {
+    const data = newRange === "week" ? [820, 932, 901, 934, 1290, 1330, 1320] : [2500, 2600, 2450, 2800, 2900, 3100, 2950, 3200];
+    const xAxisData =
+      newRange === "week"
+        ? ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+        : ["1日", "5日", "10日", "15日", "20日", "25日", "28日", "30日"];
+
+    studentTrendChart.setOption({
+      xAxis: { data: xAxisData },
+      series: [{ data }]
+    });
+  }
+});
 
 // 通知列表
 const notices = ref([
@@ -156,49 +173,57 @@ const todos = ref([
   { title: "教师资格证培训", deadline: "2024-01-25", status: "进行中" }
 ]);
 
+// 图表容器的ref
+const studentTrendChartRef = ref<HTMLElement>();
+const teacherDistChartRef = ref<HTMLElement>();
+
 // 初始化图表
 onMounted(() => {
   // 学生趋势图表
-  const studentTrendChart = echarts.init(document.querySelector("#studentTrendChart"));
-  studentTrendChart.setOption({
-    tooltip: { trigger: "axis" },
-    xAxis: { type: "category", data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"] },
-    yAxis: { type: "value" },
-    series: [
-      {
-        data: [820, 932, 901, 934, 1290, 1330, 1320],
-        type: "line",
-        smooth: true
-      }
-    ]
-  });
+  if (studentTrendChartRef.value) {
+    studentTrendChart = echarts.init(studentTrendChartRef.value);
+    studentTrendChart.setOption({
+      tooltip: { trigger: "axis" },
+      xAxis: { type: "category", data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"] },
+      yAxis: { type: "value" },
+      series: [
+        {
+          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          type: "line",
+          smooth: true
+        }
+      ]
+    });
+  }
 
   // 教师分布图表
-  const teacherDistChart = echarts.init(document.querySelector("#teacherDistChart"));
-  teacherDistChart.setOption({
-    tooltip: { trigger: "item" },
-    legend: { orient: "vertical", left: "left" },
-    series: [
-      {
-        type: "pie",
-        radius: "50%",
-        data: [
-          { value: 35, name: "语文教师" },
-          { value: 30, name: "数学教师" },
-          { value: 28, name: "英语教师" },
-          { value: 25, name: "理科教师" },
-          { value: 38, name: "其他" }
-        ],
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: "rgba(0, 0, 0, 0.5)"
+  if (teacherDistChartRef.value) {
+    teacherDistChart = echarts.init(teacherDistChartRef.value);
+    teacherDistChart.setOption({
+      tooltip: { trigger: "item" },
+      legend: { orient: "vertical", left: "left" },
+      series: [
+        {
+          type: "pie",
+          radius: "50%",
+          data: [
+            { value: 35, name: "语文教师" },
+            { value: 30, name: "数学教师" },
+            { value: 28, name: "英语教师" },
+            { value: 25, name: "理科教师" },
+            { value: 38, name: "其他" }
+          ],
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: "rgba(0, 0, 0, 0.5)"
+            }
           }
         }
-      }
-    ]
-  });
+      ]
+    });
+  }
 });
 </script>
 
