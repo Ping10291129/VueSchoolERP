@@ -15,9 +15,8 @@
     height: 94%;
     padding: 0 50px;
     background-color: rgb(255 255 255 / 80%);
-    border-radius: 10px;
     backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    border-radius: 10px;
     .dark {
       position: absolute;
       top: 13px;
@@ -75,9 +74,9 @@
         padding: 40px;
         overflow-x: hidden;
         background-color: rgb(255 255 255 / 80%);
+        backdrop-filter: blur(6px);
         border-radius: 10px;
         box-shadow: 2px 3px 7px rgb(0 0 0 / 20%);
-        backdrop-filter: blur(6px);
       }
     }
   }

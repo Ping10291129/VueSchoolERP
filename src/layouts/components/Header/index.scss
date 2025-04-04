@@ -2,30 +2,27 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 60px;
   padding: 0 20px;
   background-color: var(--el-color-primary);
-  height: 60px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
   .title {
     margin-left: 16px;
     font-size: 18px;
     font-weight: bold;
-    color: #fff;
+    color: #ffffff;
     white-space: nowrap;
     &:hover {
       color: var(--el-color-primary-light-2);
       cursor: pointer;
     }
   }
-
   .actions {
     display: flex;
     align-items: center;
-
     .action-item {
       margin-left: 10px;
-      color: #fff;
+      color: #ffffff;
       &:hover {
         color: var(--el-color-primary-light-2);
       }
