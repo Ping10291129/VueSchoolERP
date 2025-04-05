@@ -159,17 +159,13 @@
         <el-card shadow="hover" class="chart-card">
           <template #header>
             <div class="card-header">
-              <span>学生人数趋势</span>
+              <span>学生活动参与趋势</span>
               <div class="header-actions">
-                <el-radio-group v-model="studentChartType" size="small">
-                  <el-radio-button label="line">折线图</el-radio-button>
-                  <el-radio-button label="bar">柱状图</el-radio-button>
-                </el-radio-group>
                 <StudentTrendSwitch v-model="chartTimeRange" class="trend-switch" />
               </div>
             </div>
           </template>
-          <div ref="studentTrendChartRef" class="chart-container"></div>
+          <StudentTrendChart :time-range="chartTimeRange" class="chart-container" />
         </el-card>
       </el-col>
       <el-col :xs="24" :sm="24" :md="8" :lg="8">
@@ -177,20 +173,10 @@
           <template #header>
             <div class="card-header">
               <span>教师分布</span>
-              <el-dropdown trigger="click">
-                <el-button size="small" text>
-                  <el-icon>
-                    <More />
-                  </el-icon>
-                </el-button>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item>按学科查看</el-dropdown-item>
-                    <el-dropdown-item>按职称查看</el-dropdown-item>
-                    <el-dropdown-item>导出数据</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
+              <el-select v-model="teacherViewType" size="small" style="width: 120px">
+                <el-option label="按学科查看" value="subject" />
+                <el-option label="按职称查看" value="title" />
+              </el-select>
             </div>
           </template>
           <div ref="teacherDistChartRef" class="chart-container"></div>
@@ -337,7 +323,7 @@
 </template>
 
 <script setup lang="ts" name="home">
-import { ref, onMounted, watch, computed, onBeforeUnmount } from "vue";
+import { ref, onMounted, computed, onBeforeUnmount } from "vue";
 import * as echarts from "echarts";
 import {
   User,
@@ -349,7 +335,6 @@ import {
   Setting,
   Calendar,
   Plus,
-  More,
   PieChart,
   Notification,
   VideoCamera,
@@ -359,9 +344,9 @@ import {
 } from "@element-plus/icons-vue";
 import StudentTrendSwitch from "@/components/StudentTrendSwitch/index.vue";
 import { ElMessage } from "element-plus";
+import StudentTrendChart from "@/components/StudentTrendChart/index.vue";
 
 // 图表实例
-let studentTrendChart: echarts.ECharts | null = null;
 let teacherDistChart: echarts.ECharts | null = null;
 
 // 系统状态数据
@@ -379,34 +364,9 @@ const weatherInfo = ref("晴朗 26°C");
 
 // 图表时间范围和类型
 const chartTimeRange = ref("week");
-const studentChartType = ref("line");
-
-// 监听时间范围变化
-watch([chartTimeRange, studentChartType], ([newRange, newType]) => {
-  if (studentTrendChart) {
-    const maleData = newRange === "week" ? [420, 532, 501, 534, 690, 730, 620] : [1200, 1300, 1250, 1400, 1500, 1600, 1450, 1600];
-    const femaleData =
-      newRange === "week" ? [400, 400, 400, 400, 600, 600, 700] : [1300, 1300, 1200, 1400, 1400, 1500, 1500, 1600];
-    const xAxisData =
-      newRange === "week"
-        ? ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
-        : ["1日", "5日", "10日", "15日", "20日", "25日", "28日", "30日"];
-
-    studentTrendChart.setOption({
-      xAxis: { data: xAxisData },
-      series: [
-        {
-          data: maleData,
-          type: newType
-        },
-        {
-          data: femaleData,
-          type: newType
-        }
-      ]
-    });
-  }
-});
+// 删除这一行: const studentChartType = ref("line");
+// 教师视图类型
+const teacherViewType = ref("subject");
 
 // 通知列表
 const notices = ref([
@@ -480,67 +440,10 @@ const updateSystemLoad = () => {
 };
 
 // 图表容器的ref
-const studentTrendChartRef = ref<HTMLElement>();
 const teacherDistChartRef = ref<HTMLElement>();
 
 // 初始化图表
 onMounted(() => {
-  // 学生趋势图表
-  if (studentTrendChartRef.value) {
-    studentTrendChart = echarts.init(studentTrendChartRef.value);
-    studentTrendChart.setOption({
-      tooltip: { trigger: "axis" },
-      legend: {
-        data: ["男生", "女生"],
-        right: 10,
-        top: 0
-      },
-      grid: {
-        left: "3%",
-        right: "4%",
-        bottom: "3%",
-        containLabel: true
-      },
-      xAxis: {
-        type: "category",
-        data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-        axisLine: {
-          lineStyle: {
-            color: "#ddd"
-          }
-        }
-      },
-      yAxis: {
-        type: "value",
-        splitLine: {
-          lineStyle: {
-            color: "#eee"
-          }
-        }
-      },
-      series: [
-        {
-          name: "男生",
-          data: [420, 532, 501, 534, 690, 730, 620],
-          type: "line",
-          smooth: true,
-          itemStyle: {
-            color: "#409EFF"
-          }
-        },
-        {
-          name: "女生",
-          data: [400, 400, 400, 400, 600, 600, 700],
-          type: "line",
-          smooth: true,
-          itemStyle: {
-            color: "#F56C6C"
-          }
-        }
-      ]
-    });
-  }
-
   // 教师分布图表
   if (teacherDistChartRef.value) {
     teacherDistChart = echarts.init(teacherDistChartRef.value);
@@ -619,7 +522,6 @@ onBeforeUnmount(() => {
     transition: all 0.3s;
     &:hover {
       box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
-      transform: translateY(-4px);
     }
     :deep(.el-card__body) {
       padding: 0;
@@ -709,7 +611,6 @@ onBeforeUnmount(() => {
     transition: all 0.3s ease;
     &:hover {
       box-shadow: 0 5px 15px rgb(0 0 0 / 8%);
-      transform: translateY(-5px);
     }
     .card-header {
       display: flex;
@@ -796,7 +697,6 @@ onBeforeUnmount(() => {
     transition: all 0.3s;
     &:hover {
       box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
-      transform: translateY(-4px);
     }
     :deep(.el-card__header) {
       padding: 12px 20px;
@@ -854,7 +754,6 @@ onBeforeUnmount(() => {
     transition: all 0.3s;
     &:hover {
       box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
-      transform: translateY(-4px);
     }
     :deep(.el-card__header) {
       padding: 12px 20px;
@@ -889,7 +788,6 @@ onBeforeUnmount(() => {
     transition: all 0.3s;
     &:hover {
       box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
-      transform: translateY(-4px);
     }
     :deep(.el-card__body) {
       padding: 20px;
@@ -921,7 +819,6 @@ onBeforeUnmount(() => {
           &:hover {
             color: white;
             background-color: var(--el-color-primary);
-            transform: translateY(-3px);
           }
         }
         span {

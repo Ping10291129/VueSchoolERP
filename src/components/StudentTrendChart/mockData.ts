@@ -12,9 +12,10 @@ export const generateMockData = () => {
     const date = now.subtract(i, "day");
     fullDataX.push(date.format("MM-DD"));
 
-    // 生成随机数据
-    dataMale.push(Math.floor(Math.random() * 100) + 50);
-    dataFemale.push(Math.floor(Math.random() * 100) + 50);
+    // 生成随机数据 - 课外活动和课堂活动参与人数
+    const baseValue = Math.sin(i / 10) * 20 + 80; // 使用正弦函数生成基础值
+    dataMale.push(Math.floor(baseValue + Math.random() * 30));
+    dataFemale.push(Math.floor(baseValue + Math.random() * 30 - 10));
   }
 
   return {

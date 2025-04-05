@@ -26,8 +26,8 @@ interface TimeRange {
 }
 
 const timeRanges: TimeRange[] = [
-  { label: "一周", value: "week" },
-  { label: "一月", value: "month" },
+  { label: "本周", value: "week" },
+  { label: "本月", value: "month" },
   { label: "全部", value: "all" }
 ];
 
