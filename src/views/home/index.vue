@@ -207,7 +207,10 @@
               <span>系统通知</span>
               <div>
                 <el-button type="primary" size="small" @click="showPublishDialog = true">
-                  <el-icon> <Plus /> </el-icon>发布通知
+                  <el-icon>
+                    <Plus />
+                  </el-icon>
+                  发布通知
                 </el-button>
                 <el-button type="primary" link>管理通知</el-button>
               </div>
@@ -609,62 +612,91 @@ onBeforeUnmount(() => {
 
   // 欢迎卡片样式
   .welcome-card {
-    background: linear-gradient(135deg, var(--el-color-primary-light-7), var(--el-color-primary-light-9));
+    overflow: hidden;
+    background: var(--el-bg-color);
+    border: 1px solid var(--el-border-color-light);
+    border-radius: 4px;
+    transition: all 0.3s;
+    &:hover {
+      box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+      transform: translateY(-4px);
+    }
     :deep(.el-card__body) {
       padding: 0;
     }
     .welcome-content {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px;
+      padding: 16px;
+      overflow: hidden;
 
-      @media (width <=768px) {
+      @media (width <= 768px) {
         flex-direction: column;
         align-items: flex-start;
+        padding: 16px;
       }
       .welcome-info {
         h1 {
           margin: 0 0 10px;
           font-size: 24px;
-          color: var(--el-color-primary-dark-2);
+          font-weight: 500;
+          color: var(--el-color-primary);
         }
         p {
-          margin: 0 0 20px;
-          color: var(--el-text-color-secondary);
+          margin: 0 0 16px;
+          font-size: 14px;
+          color: var(--el-text-color-regular);
         }
         .quick-actions {
           display: flex;
-          gap: 10px;
-          margin-top: 15px;
+          gap: 8px;
+          margin-top: 16px;
 
-          @media (width <=768px) {
+          @media (width <= 768px) {
             flex-wrap: wrap;
+          }
+          .el-button {
+            color: var(--el-color-primary);
+            background: var(--el-color-primary-light-9);
+            border: 1px solid var(--el-color-primary-light-5);
+            transition: background-color 0.3s ease;
+            &:hover {
+              color: white;
+              background: var(--el-color-primary);
+            }
+            .el-icon {
+              margin-right: 4px;
+            }
           }
         }
       }
       .welcome-stats {
         display: flex;
-        gap: 20px;
+        gap: 16px;
+        margin-left: 24px;
 
-        @media (width <=768px) {
+        @media (width <= 768px) {
           justify-content: space-between;
           width: 100%;
-          margin-top: 20px;
+          margin-top: 16px;
+          margin-left: 0;
         }
         .stat-item {
-          padding: 10px 20px;
+          min-width: 100px;
+          padding: 12px;
           text-align: center;
-          background-color: rgb(255 255 255 / 80%);
-          border-radius: 8px;
-          box-shadow: 0 2px 12px 0 rgb(0 0 0 / 5%);
+          background: var(--el-fill-color-light);
+          border-radius: 4px;
           .stat-value {
-            font-size: 24px;
-            font-weight: bold;
+            margin-bottom: 2px;
+            font-size: 20px;
+            font-weight: 500;
             color: var(--el-color-primary);
           }
           .stat-label {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--el-text-color-secondary);
           }
         }
@@ -702,26 +734,21 @@ onBeforeUnmount(() => {
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        &.success {
-          background-color: var(--el-color-success-light-9);
+        &.success,
+        &.warning {
+          background-color: var(--el-color-primary-light-8);
           .icon {
-            color: var(--el-color-success);
+            color: var(--el-color-primary);
           }
         }
         &.info {
-          background-color: var(--el-color-info-light-9);
+          background-color: var(--el-color-primary-light-8);
           .icon {
-            color: var(--el-color-info);
-          }
-        }
-        &.warning {
-          background-color: var(--el-color-warning-light-9);
-          .icon {
-            color: var(--el-color-warning);
+            color: var(--el-color-primary);
           }
         }
         &.primary {
-          background-color: var(--el-color-primary-light-9);
+          background-color: var(--el-color-primary-light-8);
           .icon {
             color: var(--el-color-primary);
           }
@@ -740,6 +767,14 @@ onBeforeUnmount(() => {
         color: var(--el-text-color-secondary);
         text-align: right;
       }
+      .el-progress {
+        &.el-progress--success,
+        &.el-progress--warning {
+          .el-progress-bar__inner {
+            background-color: var(--el-color-primary);
+          }
+        }
+      }
     }
   }
 
@@ -757,6 +792,12 @@ onBeforeUnmount(() => {
 
   // 通知和待办卡片样式
   .notice-todo-card {
+    border: 1px solid var(--el-border-color-light);
+    transition: all 0.3s;
+    &:hover {
+      box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+      transform: translateY(-4px);
+    }
     :deep(.el-card__header) {
       padding: 12px 20px;
       border-bottom: 1px solid var(--el-border-color-light);
@@ -809,6 +850,12 @@ onBeforeUnmount(() => {
 
   // 图表卡片样式
   .chart-card {
+    border: 1px solid var(--el-border-color-light);
+    transition: all 0.3s;
+    &:hover {
+      box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+      transform: translateY(-4px);
+    }
     :deep(.el-card__header) {
       padding: 12px 20px;
       border-bottom: 1px solid var(--el-border-color-light);
@@ -830,7 +877,7 @@ onBeforeUnmount(() => {
       height: 35vh;
       padding: 0;
 
-      @media (width <=768px) {
+      @media (width <= 768px) {
         height: 30vh;
       }
     }
@@ -838,6 +885,12 @@ onBeforeUnmount(() => {
 
   // 快捷功能区样式
   .shortcut-card {
+    border: 1px solid var(--el-border-color-light);
+    transition: all 0.3s;
+    &:hover {
+      box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+      transform: translateY(-4px);
+    }
     :deep(.el-card__body) {
       padding: 20px;
     }
@@ -846,11 +899,11 @@ onBeforeUnmount(() => {
       grid-template-columns: repeat(8, 1fr);
       gap: 20px;
 
-      @media (width <=1200px) {
+      @media (width <= 1200px) {
         grid-template-columns: repeat(4, 1fr);
       }
 
-      @media (width <=768px) {
+      @media (width <= 768px) {
         grid-template-columns: repeat(2, 1fr);
       }
       .shortcut-item {
