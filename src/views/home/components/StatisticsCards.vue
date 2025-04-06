@@ -177,4 +177,20 @@ defineProps<{
     }
   }
 }
+
+// 小屏幕适配
+@media (width <= 768px) {
+  .el-col {
+    margin-bottom: 20px;
+    &:nth-child(odd) {
+      padding-right: 10px;
+    }
+    &:nth-child(even) {
+      padding-left: 10px;
+    }
+    &:nth-child(n + 3) {
+      margin-top: 0;
+    }
+  }
+}
 </style>

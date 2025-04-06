@@ -256,4 +256,14 @@ const mapNoticeTypeToTimelineType = (type: string): "primary" | "success" | "war
     }
   }
 }
+
+// 为小屏幕添加额外的样式
+@media (width <= 768px) {
+  .el-col {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
 </style>

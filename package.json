@@ -1,22 +1,22 @@
 {
   "name": "school-admin",
   "private": true,
-  "version": "1.2.2",
+  "version": "1.31",
   "type": "module",
   "description": "智慧校园Admin",
   "author": {
-    "name": "Geeker",
+    "name": "ZYX&LFYJ",
     "email": "zyx10291129@gmail.com",
-    "url": "https://github.com/HalseySpicy"
+    "url": "https://github.com/Ping10291129"
   },
   "license": "MIT",
   "homepage": "https://github.com/HalseySpicy/Geeker-Admin",
   "repository": {
     "type": "git",
-    "url": "git@github.com:HalseySpicy/Geeker-Admin.git"
+    "url": "https://github.com/HalseySpicy/Geeker-Admin"
   },
   "bugs": {
-    "url": "https://github.com/HalseySpicy/Geeker-Admin/issues"
+    "url": "https://github.com/HalseySpicy/Geeker-Admin"
   },
   "scripts": {
     "dev": "vite",

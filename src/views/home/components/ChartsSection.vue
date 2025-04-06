@@ -206,4 +206,14 @@ onMounted(() => {
     align-items: center;
   }
 }
+
+// 小屏幕适配
+@media (width <= 768px) {
+  .el-col {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- 欢迎区域 -->
-    <div class="mb-4">
+    <div class="section-wrapper">
       <WelcomeSection
         :online-users="onlineUsers"
         :today-logins="todayLogins"
@@ -11,17 +11,17 @@
     </div>
 
     <!-- 数据统计卡片 -->
-    <div class="mb-4">
+    <div class="section-wrapper">
       <StatisticsCards :system-load="systemLoad" />
     </div>
 
     <!-- 图表区域 -->
-    <div class="mb-4">
+    <div class="section-wrapper">
       <ChartsSection v-model:chart-time-range="chartTimeRange" v-model:teacher-view-type="teacherViewType" />
     </div>
 
     <!-- 管理功能区 -->
-    <div class="mb-4">
+    <div class="section-wrapper">
       <NoticeAndTodoSection
         :notices="notices"
         :todos="todos"
@@ -31,7 +31,7 @@
     </div>
 
     <!-- 快捷功能区 -->
-    <div class="mb-4">
+    <div class="section-wrapper">
       <ShortcutsSection :shortcuts="shortcuts" />
     </div>
 
@@ -166,11 +166,17 @@ onBeforeUnmount(() => {
 <style scoped lang="scss">
 .home {
   padding: 20px;
-
-  // 引入辅助类
-  .mb-4 {
+  .section-wrapper {
     margin-bottom: 20px;
+
+    // 确保在小屏幕上仍然保持边距
+    @media (width <= 768px) {
+      margin-bottom: 20px;
+    }
   }
+
+  // 移除旧的辅助类，因为我们已经使用了更具体的 section-wrapper
+  // 但保留 mt-4 以防其他地方有使用
   .mt-4 {
     margin-top: 20px;
   }
