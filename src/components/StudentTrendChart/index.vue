@@ -80,6 +80,13 @@ const updateChart = () => {
         restore: { title: "还原" }
       }
     },
+    grid: {
+      top: "10%",
+      left: "3%",
+      right: "3%",
+      bottom: "5%",
+      containLabel: true
+    },
     legend: {
       data: ["课外活动", "课堂活动"],
       top: 25
@@ -96,7 +103,7 @@ const updateChart = () => {
       axisLabel: {
         color: "#666",
         formatter: (value: string) => {
-          return value.replace("-", "/");
+          return value.replace(/-/g, "/");
         }
       }
     },

@@ -85,14 +85,14 @@ const todos = ref([
 
 // 快捷功能
 const shortcuts = ref([
-  { name: "数据分析", icon: PieChart },
-  { name: "课程管理", icon: Reading },
-  { name: "教师管理", icon: Management },
-  { name: "学生管理", icon: User },
-  { name: "通知公告", icon: Notification },
-  { name: "视频监控", icon: VideoCamera },
-  { name: "考勤管理", icon: Stopwatch },
-  { name: "资源中心", icon: Paperclip }
+  { name: "数据分析", icon: PieChart, route: "/data-analytics" },
+  { name: "课程管理", icon: Reading, route: "/course-management" },
+  { name: "教师管理", icon: Management, route: "/teacher-management" },
+  { name: "学生管理", icon: User, route: "/student-management" },
+  { name: "通知公告", icon: Notification, route: "/notifications" },
+  { name: "视频监控", icon: VideoCamera, route: "/video-surveillance" },
+  { name: "考勤管理", icon: Stopwatch, route: "/attendance" },
+  { name: "资源中心", icon: Paperclip, route: "/resources" }
 ]);
 
 // 发布通知对话框
