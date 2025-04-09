@@ -120,12 +120,24 @@ const handleSendCode = async () => {
   }
 
   if (Date.now() - lastSendTime.value < 60000) {
-    ElMessage.warning("操作过于频繁");
+    ElMessage.warning("请勿频繁发送验证码");
+    return;
+  }
+
+  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(registerForm.email)) {
+    ElMessage.error("请输入正确的邮箱格式");
     return;
   }
 
   try {
     await sendCode(registerForm.email);
+    ElNotification({
+      title: "发送成功",
+      message: "验证码已发送到您的邮箱，请注意查收",
+      type: "success",
+      duration: 3000
+    });
+
     isSending.value = true;
     lastSendTime.value = Date.now();
 
@@ -137,8 +149,15 @@ const handleSendCode = async () => {
         countdown.value = 60;
       }
     }, 1000);
-  } catch (error) {
-    ElMessage.error("验证码发送失败");
+  } catch (error: any) {
+    ElNotification({
+      title: "发送失败",
+      message: error.message || "验证码发送失败，请稍后重试",
+      type: "error",
+      duration: 3000
+    });
+    isSending.value = false;
+    countdown.value = 60;
   }
 };
 

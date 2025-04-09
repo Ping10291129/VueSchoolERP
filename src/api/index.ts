@@ -12,6 +12,7 @@ import router from "@/routers";
 export interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   loading?: boolean;
   cancel?: boolean;
+  noNeedToken?: boolean;
 }
 
 const config = {
@@ -38,6 +39,11 @@ class RequestHttp {
      */
     this.service.interceptors.request.use(
       (config: CustomAxiosRequestConfig) => {
+        // 不需要token的请求直接放行
+        if (config.noNeedToken) {
+          return config;
+        }
+
         const userStore = useUserStore();
         // 重复请求不需要取消，在 api 服务中通过指定的第三个参数: { cancel: false } 来控制
         config.cancel ??= true;
