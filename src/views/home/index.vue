@@ -15,9 +15,9 @@
       <StatisticsCards :system-load="systemLoad" />
     </div>
 
-    <!-- 图表区域 -->
+    <!-- 数据可视化 -->
     <div class="section-wrapper">
-      <ChartsSection v-model:chart-time-range="chartTimeRange" v-model:teacher-view-type="teacherViewType" />
+      <DataVisualizeSection />
     </div>
 
     <!-- 管理功能区 -->
@@ -48,7 +48,7 @@ import { ElMessage } from "element-plus";
 // 导入拆分的组件
 import WelcomeSection from "./components/WelcomeSection.vue";
 import StatisticsCards from "./components/StatisticsCards.vue";
-import ChartsSection from "./components/ChartsSection.vue";
+import DataVisualizeSection from "./components/DataVisualizeSection.vue";
 import NoticeAndTodoSection from "./components/NoticeAndTodoSection.vue";
 import ShortcutsSection from "./components/ShortcutsSection.vue";
 import PublishNoticeDialog from "./components/PublishNoticeDialog.vue";
@@ -62,11 +62,6 @@ const systemUptime = ref("23天12小时");
 // 目标系统状态 - 用于平滑过渡
 const targetSystemLoad = ref(42);
 const targetOnlineUsers = ref(128);
-
-// 图表时间范围和类型
-const chartTimeRange = ref("week");
-// 教师视图类型
-const teacherViewType = ref("subject");
 
 // 通知列表
 const notices = ref([
