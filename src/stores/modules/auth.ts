@@ -6,51 +6,56 @@ import { getFlatMenuList, getShowMenuList, getAllBreadcrumbList } from "@/utils"
 export const useAuthStore = defineStore({
   id: "geeker-auth",
   state: (): AuthState => ({
-    // 按钮权限列表
+    // 按钮权限
     authButtonList: {},
-    // 菜单权限列表
+    // 菜单权限
     authMenuList: [],
-    // 当前页面的 router name，用来做按钮权限筛选
+    // 路由名称
     routeName: ""
   }),
   getters: {
-    // 按钮权限列表
+    // 按钮权限
     authButtonListGet: state => state.authButtonList,
-    // 菜单权限列表 ==> 这里的菜单没有经过任何处理
+    // 菜单权限
     authMenuListGet: state => state.authMenuList,
-    // 菜单权限列表 ==> 左侧菜单栏渲染，需要剔除 isHide == true
+    // 显示菜单
     showMenuListGet: state => getShowMenuList(state.authMenuList),
-    // 菜单权限列表 ==> 扁平化之后的一维数组菜单，主要用来添加动态路由
+    // 扁平菜单
     flatMenuListGet: state => getFlatMenuList(state.authMenuList),
-    // 递归处理后的所有面包屑导航列表
+    // 面包屑导航
     breadcrumbListGet: state => getAllBreadcrumbList(state.authMenuList)
   },
   actions: {
-    // Get AuthButtonList
+    // 获取按钮
     async getAuthButtonList() {
       const { data } = await getAuthButtonListApi();
       this.authButtonList = data;
     },
-    // Get AuthMenuList
+    // 获取菜单
     async getAuthMenuList() {
       const { data } = await getAuthMenuListApi();
       // 过滤菜单，只保留指定的页面
+      // 更新allowedPaths数组过滤逻辑
       const allowedPaths = [
         "/home/index",
         "/proTable",
         "/proTable/useProTable",
         "/proTable/complexProTable",
         "/about/index",
+        "/dataScreen", // 补充父级路径
         "/dataScreen/index"
       ];
+
+      // 修改过滤条件处理父子路径
       const filteredData = data.filter((item: any) => {
-        // 过滤掉不需要的页面
+        // 保留父级菜单及其子项
+        if (item.path === "/dataScreen") return true;
+
         if (item.path === "/proTable") {
-          // 对于proTable父级菜单，只保留指定的子页面
           if (item.children) {
-            item.children = item.children.filter((child: any) => {
-              return child.path === "/proTable/useProTable" || child.path === "/proTable/complexProTable";
-            });
+            item.children = item.children.filter(
+              (child: any) => child.path === "/proTable/useProTable" || child.path === "/proTable/complexProTable"
+            );
           }
           return true;
         }
@@ -58,7 +63,7 @@ export const useAuthStore = defineStore({
       });
       this.authMenuList = filteredData;
     },
-    // Set RouteName
+    // 设置路由
     async setRouteName(name: string) {
       this.routeName = name;
     }
