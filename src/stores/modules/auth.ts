@@ -34,7 +34,29 @@ export const useAuthStore = defineStore({
     // Get AuthMenuList
     async getAuthMenuList() {
       const { data } = await getAuthMenuListApi();
-      this.authMenuList = data;
+      // 过滤菜单，只保留指定的页面
+      const allowedPaths = [
+        "/home/index",
+        "/proTable",
+        "/proTable/useProTable",
+        "/proTable/complexProTable",
+        "/about/index",
+        "/dataScreen/index"
+      ];
+      const filteredData = data.filter((item: any) => {
+        // 过滤掉不需要的页面
+        if (item.path === "/proTable") {
+          // 对于proTable父级菜单，只保留指定的子页面
+          if (item.children) {
+            item.children = item.children.filter((child: any) => {
+              return child.path === "/proTable/useProTable" || child.path === "/proTable/complexProTable";
+            });
+          }
+          return true;
+        }
+        return allowedPaths.includes(item.path);
+      });
+      this.authMenuList = filteredData;
     },
     // Set RouteName
     async setRouteName(name: string) {
