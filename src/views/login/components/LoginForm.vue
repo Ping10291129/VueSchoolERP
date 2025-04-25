@@ -36,17 +36,10 @@ import { Login } from "@/api/interface";
 import { ElNotification } from "element-plus";
 import { loginApi } from "@/api/modules/login";
 import { useUserStore } from "@/stores/modules/user";
-import { useTabsStore } from "@/stores/modules/tabs";
-import { useKeepAliveStore } from "@/stores/modules/keepAlive";
-import { initDynamicRouter } from "@/routers/modules/dynamicRouter";
 import { CircleClose, UserFilled } from "@element-plus/icons-vue";
 import type { ElForm } from "element-plus";
-import md5 from "md5";
-
 const router = useRouter();
 const userStore = useUserStore();
-const tabsStore = useTabsStore();
-const keepAliveStore = useKeepAliveStore();
 
 type FormInstance = InstanceType<typeof ElForm>;
 const loginFormRef = ref<FormInstance>();
@@ -68,11 +61,9 @@ const login = (formEl: FormInstance | undefined) => {
     if (!valid) return;
     loading.value = true;
     try {
-      const { data } = await loginApi({ ...loginForm, password: md5(loginForm.password) });
-      userStore.setToken(data.access_token);
-      await initDynamicRouter();
-      tabsStore.setTabs([]);
-      keepAliveStore.setKeepAliveName([]);
+      const { data } = await loginApi(loginForm);
+      userStore.setToken(data?.token);
+      // 直接跳转首页
       router.push(HOME_URL);
       ElNotification({
         title: getTimeState(),
